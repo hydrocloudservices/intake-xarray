@@ -83,13 +83,7 @@ class NetCDFSource(DataSourceMixin, PatternMixin):
         else:
             _open_dataset = xr.open_dataset
 
-        if self._can_be_local:
-            url = fsspec.open_local(self.urlpath, **self.storage_options)
-        else:
-            # https://github.com/intake/filesystem_spec/issues/476#issuecomment-732372918
-            url = fsspec.open(self.urlpath, **self.storage_options).open()
-
-        self._ds = _open_dataset(url, chunks=self.chunks, **kwargs)
+        self._ds = _open_dataset(self.urlpath, chunks=self.chunks, **kwargs)
 
     def _add_path_to_ds(self, ds):
         """Adding path info to a coord for a particular file
